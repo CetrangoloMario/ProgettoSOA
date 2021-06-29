@@ -11,15 +11,13 @@ from pyspark.sql import SparkSession, DataFrame
 
 spark = SparkSession.builder.appName("esempio").getOrCreate()
 
-pathcsv= sys.argv[1]
+pathcsv=  r"C:\Users\cetra\Desktop\dataset\Summary_Details\2020_01\2020_01_22_00_Summary_Details.csv"#sys.argv[1]
 #pathOutput =sys.argv[2]
 print(pathcsv)
 #print(pathOutput)
 
 dfTopLang= spark.read.option("inferSchema","true").option("header","true").csv(pathcsv)
-
 super=dfTopLang.groupby("Language").count()
-
 super.write.csv("/user/soa/dataset/ciao.csv", header=False)
 
 

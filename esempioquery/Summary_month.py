@@ -1,7 +1,7 @@
 import sys
 
-from pyspark.sql import *
-from pyspark.sql.functions import *
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import month
 
 spark = SparkSession.builder.appName("esempio").getOrCreate()
 
