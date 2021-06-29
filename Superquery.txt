@@ -1,0 +1,16 @@
+
+
+Hastag 
+
+tirare le parole più utilizzate e tweet_id fare un count
+
+
+sentiment
+count dei sentiment_label e percentuale dei log.
+
+tutt e 3 
+
+con tweet_ID tiro fuori massimo Retweets e likes con hastag collegato e retweet.
+
+
+cosa ha comportato aumento dei casi in 3 4 date, 
