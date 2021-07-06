@@ -129,7 +129,7 @@ def main():
     #languageSentiment(dfDetails,dfSentiment)
     #summaryMonth(dfDetails)
     #maxLikeSentiment(dfDetails,dfSentiment)
-    maxHashtagSentiment(dfHashtag,dfSentiment,dfDetails)
+    #maxHashtagSentiment(dfHashtag,dfSentiment,dfDetails)
 
 
 
