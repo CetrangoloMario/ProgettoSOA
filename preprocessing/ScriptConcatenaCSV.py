@@ -11,8 +11,8 @@ import sys
  #/Users/manlio/Desktop/COVID19_Tweets_Dataset/Summary_Details/2020_01"
  #/Users/manlio/Desktop/COVID19_Tweets_Dataset/AllSummaryDetails1.csv
 
-pathCartellaUnire = sys.argv[1]
-pathOutput =sys.argv[2]
+pathCartellaUnire = "/Users/cetra/Desktop/dataset/2020_01"#sys.argv[1]
+pathOutput ="/Users/cetra/Desktop/dataset/SummarDetails.csv"
 
 print(pathCartellaUnire)
 print(pathOutput)
