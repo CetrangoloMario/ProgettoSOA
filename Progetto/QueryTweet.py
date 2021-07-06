@@ -32,7 +32,7 @@ def topSentiment(dataframe):
     super = dataframe.groupby("Sentiment_Label").count().orderBy("count", ascending=False)
     super.write.csv("/Users/cetra/Desktop/risultati/topSentiment.csv", header=False)
 
-def topSentimentMonth(*dataframe:pyspark.sql.dataframe.DataFrame):
+def topSentimentMonth(*dataframe):
     dfDetails, dfSentiment = dataframe
     dfjoin = dfSentiment.join(dfDetails, "Tweet_ID", 'inner')
     for i in listmese:
