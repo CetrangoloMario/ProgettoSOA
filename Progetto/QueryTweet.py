@@ -93,9 +93,9 @@ def maxHashtagSentiment(*dataframe:pyspark.sql.dataframe.DataFrame):
             super = dfJoin.filter(instr(dfJoin["Date Created"], i) >= 1).groupby("Hashtag").count().withColumnRenamed(
                 "count", i).orderBy(i, ascending=False).limit(1)
             maxHashtag = super.head()["Hashtag"]
-            maxPositive = dfJoin.filter("Sentiment_Label == 'positive'").where("Hashtag == '"+maxHashtag+"'").agg(F.count("Tweet_ID")).withColumnRenamed("count(Tweet_ID)","Positive_max_Hashtag_"+i).show()
-            maxNegative = dfJoin.filter("Sentiment_Label == 'negative'").where("Hashtag =='"+maxHashtag+"'").agg(F.count("Tweet_ID")).withColumnRenamed("count(Tweet_ID)","Negative_max_Hashtag_"+i).show()
-            maxNeutral = dfJoin.filter("Sentiment_Label == 'neutral'").where("Hashtag == '"+maxHashtag+"'").agg(F.count("Tweet_ID")).withColumnRenamed("count(Tweet_ID)","Neutral_max_Hashtag_"+i).show()
+            maxPositive = dfJoin.filter("Sentiment_Label == 'positive'").where("Hashtag == '"+maxHashtag+"'").agg(F.count("Tweet_ID")).withColumnRenamed("count(Tweet_ID)","Positive_max_Hashtag_"+i)
+            maxNegative = dfJoin.filter("Sentiment_Label == 'negative'").where("Hashtag =='"+maxHashtag+"'").agg(F.count("Tweet_ID")).withColumnRenamed("count(Tweet_ID)","Negative_max_Hashtag_"+i)
+            maxNeutral = dfJoin.filter("Sentiment_Label == 'neutral'").where("Hashtag == '"+maxHashtag+"'").agg(F.count("Tweet_ID")).withColumnRenamed("count(Tweet_ID)","Neutral_max_Hashtag_"+i)
 
             maxPositive.write.csv("/Users/cetra/Desktop/risultati/Positive_max_Hashtag_"+i+".csv", header=True)
             maxNegative.write.csv("/Users/cetra/Desktop/risultati/Negative_max_Hashtag_"+i+".csv", header=True)
