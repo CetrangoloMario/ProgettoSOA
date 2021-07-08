@@ -1,4 +1,4 @@
-import pyspark
+
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import month, instr
 import pyspark.sql.functions as F
@@ -14,16 +14,37 @@ def topAllDay(*dataframe ):
     dfDetails,dfSentiment,dfHastag  = dataframe
     sj = dfHastag.join(dfSentiment, "Tweet_ID", 'inner')
     dfJoin = sj.join(dfDetails, "Tweet_ID", 'inner')
+    topAllDay1(dfJoin)
+    topAllDay2(dfJoin)
+    topAllDay3(dfJoin)
+
+def topAllDay1(dfJoin):
+    for i in listgiorni:
+        try:
+            super = dfJoin.filter(instr(dfJoin["Date Created"], i) >= 1)
+            topLang(super)
+        except:
+            print("Giorno saltato: " + i)
+            continue
+
+def topAllDay2(dfJoin):
     for i in listgiorni:
         try:
             super = dfJoin.filter(instr(dfJoin["Date Created"], i) >= 1)
             topSentiment(super)
-            topHashtag(super)
-            topLang(super)
-
         except:
             print("Giorno saltato: " + i)
             continue
+
+def topAllDay3(dfJoin):
+    for i in listgiorni:
+        try:
+            super = dfJoin.filter(instr(dfJoin["Date Created"], i) >= 1)
+            topHashtag(super)
+        except:
+            print("Giorno saltato: " + i)
+            continue
+
 
 
 
@@ -135,21 +156,19 @@ def main():
     dfHashtag = spark.read.option("inferSchema", "true").option("header", "true").csv(pathHashtag)
     dfSentiment = spark.read.option("inferSchema", "true").option("header", "true").csv(pathSentiment)
 
-    #topLang(dfDetails)
-    #topLangMonth(dfDetails)
-    #topHashtag(dfHashtag)
-    #topHashtagMonth(dfDetails,dfHashtag)
-    #topSentiment(dfSentiment)
-    #topSentimentMonth(dfDetails, dfSentiment)
-    #avgTweetsMonth(dfDetails)
-    #totTweets_Retweets_Month(dfDetails)
-    #languageSentiment(dfDetails,dfSentiment)
-    #summaryMonth(dfDetails)
-    #maxLikeSentiment(dfDetails,dfSentiment)
-    #maxHashtagSentiment(dfHashtag,dfSentiment,dfDetails)
+    topLang(dfDetails)
+    topLangMonth(dfDetails)
+    topHashtag(dfHashtag)
+    topHashtagMonth(dfDetails,dfHashtag)
+    topSentiment(dfSentiment)
+    topSentimentMonth(dfDetails, dfSentiment)
+    avgTweetsMonth(dfDetails)
+    totTweets_Retweets_Month(dfDetails)
+    languageSentiment(dfDetails,dfSentiment)
+    summaryMonth(dfDetails)
+    maxLikeSentiment(dfDetails,dfSentiment)
+    maxHashtagSentiment(dfHashtag,dfSentiment,dfDetails)
     topAllDay(dfDetails,dfSentiment,dfHashtag)
-
-
 
 
 
