@@ -1,4 +1,7 @@
+import string
 import time
+
+import pyspark.sql.dataframe
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import month, instr
 import pyspark.sql.functions as F
@@ -8,6 +11,7 @@ spark = SparkSession.builder.appName("Query_su_Tweet_Covid19").getOrCreate()
 
 listmese="Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"
 listgiorni ="Jan 22", "Mar 11","Dec 14", "Feb 21", "Oct 28"
+super=[]
 
 
 def topAllDay(*dataframe ):
@@ -48,9 +52,10 @@ def topAllDay3(dfJoin):
 
 
 
-def topLang(dataframe):
-    super = dataframe.groupby("Language").count().orderBy("count", ascending=False)
-    super.write.csv("/user/soa/cetrangolo_santonastaso/risultati/topLang.csv",mode="append", header=False)
+def topLang(dataframe:pyspark.sql.dataframe.DataFrame):
+    super.append(dataframe.groupby("Language").count().orderBy("count", ascending=False).collect())
+
+    #super.write.csv("/user/soa/cetrangolo_santonastaso/risultati/topLang.csv",mode="append", header=False)
 
 def topHashtag(dataframe):
     super = dataframe.groupby("Hashtag").count().orderBy("count", ascending=False)
@@ -105,6 +110,7 @@ def languageSentiment(*dataframe):
     languagePositive.write.csv("/user/soa/cetrangolo_santonastaso/risultati/LanguageSentiment.csv",mode="append", header=True)
     languageNeutral.write.csv("/user/soa/cetrangolo_santonastaso/risultati/LanguageSentiment.csv",mode="append", header=True)
 
+
 def summaryMonth(dataframe):
     super=dataframe.groupby(month("Date Created")).sum("Retweets", "Likes")
     super.write.csv("/user/soa/cetrangolo_santonastaso/risultati/summary_month.csv", header=True)
@@ -148,19 +154,18 @@ def maxHashtagSentiment(*dataframe):
 
 def main():
 
-    pathDetails= "/user/soa/cetrangolo_santonastaso/Summary_month/Summary_Details/Summary_Details_year.csv"
-    #"/Users/cetra/Desktop/dataset/SummarDetails.csv" #sys.argv[1]
+    pathDetails= "/Users/cetra/Desktop/dataset/SummarDetails.csv" #sys.argv[1]
     pathHashtag ="/user/soa/cetrangolo_santonastaso/Summary_month/Summary_Hashtag/Summary_Hashtag_bigfile.csv"
     #"/Users/cetra/Desktop/dataset/Summary_Hashtag.csv"  # sys.argv[1]
     pathSentiment ="/user/soa/cetrangolo_santonastaso/Summary_month/Summary_Sentiment/Summary_Sentiment_year.csv"
     #"/Users/cetra/Desktop/dataset/Summary_Sentiment.csv"  # sys.argv[1]
 
     dfDetails = spark.read.option("inferSchema", "true").option("header", "true").csv(pathDetails)
-    dfHashtag = spark.read.option("inferSchema", "true").option("header", "true").csv(pathHashtag)
-    dfSentiment = spark.read.option("inferSchema", "true").option("header", "true").csv(pathSentiment)
+    #dfHashtag = spark.read.option("inferSchema", "true").option("header", "true").csv(pathHashtag)
+    #dfSentiment = spark.read.option("inferSchema", "true").option("header", "true").csv(pathSentiment)
 
     topLang(dfDetails)
-    topLangMonth(dfDetails)
+    """ topLangMonth(dfDetails)
     topHashtag(dfHashtag)
     topHashtagMonth(dfDetails,dfHashtag)
     topSentiment(dfSentiment)
@@ -172,18 +177,15 @@ def main():
     maxLikeSentiment(dfDetails,dfSentiment)
     maxHashtagSentiment(dfHashtag,dfSentiment,dfDetails)
     topAllDay(dfDetails,dfSentiment,dfHashtag)
+    """
 
-
-start_time_tot=time.time()
-start_time_proc=time.clock()
 
 main()
+file=open("/Users/cetra/Desktop/super.txt","w")
+for i in super:
+    file.write(str(i))
 
-finish_time_proc=time.clock()-start_time_proc+" seconds time_processore"
-finish_time_tot=time.time()-start_time_tot+" seconds time_totale"
-file=open("/user/soa/cetrangolo_santonastaso/file_timestamp.txt","w")
-file.write(finish_time_tot)
-file.write(finish_time_proc)
+
 file.close()
 
 spark.stop()
