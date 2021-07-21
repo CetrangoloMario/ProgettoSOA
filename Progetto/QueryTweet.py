@@ -1,5 +1,3 @@
-import string
-import time
 
 import pyspark.sql.dataframe
 from pyspark.sql import SparkSession
@@ -53,8 +51,7 @@ def topAllDay3(dfJoin):
 
 
 def topLang(dataframe:pyspark.sql.dataframe.DataFrame):
-    super.append(dataframe.groupby("Language").count().orderBy("count", ascending=False).collect())
-
+    super=(dataframe.groupby("Language").count().orderBy("count", ascending=False))
     #super.write.csv("/user/soa/cetrangolo_santonastaso/risultati/topLang.csv",mode="append", header=False)
 
 def topHashtag(dataframe):

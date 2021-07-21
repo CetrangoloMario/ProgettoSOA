@@ -1,0 +1,8 @@
+use tweetcovid;
+
+LOAD DATA  INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/2020_01_22_00_Summary_Details.csv' 
+INTO TABLE summarydetails 
+FIELDS TERMINATED BY ',' 
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS;
